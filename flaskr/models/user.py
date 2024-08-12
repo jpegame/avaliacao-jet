@@ -1,4 +1,3 @@
-import sqlalchemy as sa
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from sqlalchemy_history import make_versioned
@@ -25,16 +24,15 @@ class UserModel(db_instance.Model, UserMixin):
 
     id = db_instance.Column(db_instance.Integer, primary_key=True, index=True)
     username = db_instance.Column(db_instance.String(80))
-    password = db_instance.Column(db_instance.String(200))
+    email = db_instance.Column(db_instance.String(120))
+    password_hash = db_instance.Column(db_instance.String(200))
     created_at = db_instance.Column(db_instance.DateTime(timezone=True), default=func.now())
     updated_at = db_instance.Column(db_instance.DateTime(timezone=True), default=func.now(), onupdate=func.now())
 
-    def __init__(self, username, password):
+    def __init__(self, username, email, password_hash):
         self.username = username
-        self.set_password(password)
-
-    def __repr__(self):
-        return "<UserModel(id={self.id!r}, username={self.username!r}), pwd={self.password!r})>".format(self=self)
+        self.email = email
+        self.set_password(password_hash)
 
     def set_password(self, pwd):
         self.password = generate_password_hash(pwd)
@@ -62,8 +60,5 @@ class UserModel(db_instance.Model, UserMixin):
     def init_data():
         if db_instance.session.query(UserModel.id).count() == 0:
             for count_user in range(1, 6):
-                user = UserModel(username="user" + str(count_user), password="pwd" + str(count_user))
+                user = UserModel(username="user" + str(count_user), password_hash="pwd" + str(count_user), email=f'user{str(count_user)}@gmail.com')
                 user.save()
-
-
-sa.orm.configure_mappers()

@@ -2,7 +2,9 @@ from sqlalchemy import inspect
 
 from flaskr.db import db_instance
 from flaskr.models.user import UserModel
-
+from flaskr.models.post import PostModel
+from flaskr.models.comment import CommentModel
+from flaskr.models.like import LikeModel
 
 def model_exists(model_class):
     engine = db_instance.get_engine()
@@ -14,3 +16,10 @@ def model_exists(model_class):
 def init_load_data():
     if model_exists(UserModel):
         UserModel.init_data()
+    if model_exists(PostModel):
+        PostModel.init_data()
+    if model_exists(CommentModel):
+        CommentModel.init_data()
+    if model_exists(LikeModel):
+        LikeModel.init_data()
+    
