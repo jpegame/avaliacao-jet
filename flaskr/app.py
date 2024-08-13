@@ -10,6 +10,7 @@ from flaskr.schema import config_marshmallow
 from flaskr.security import config_app_cors, config_jwt_token
 from flaskr.swagger_docs import config_swagger
 from flaskr.versioning_db import config_versioning
+from flaskr.admin import config_flask_admin
 
 app = Flask(__name__)
 
@@ -41,6 +42,9 @@ jwt = config_jwt_token(app)
 # Config App CORS
 config_app_cors(app)
 
+# Config Flask Admin
+config_flask_admin(app)
+
 # Config Swagger Documentation
 docs = config_swagger(app)
 
@@ -53,4 +57,4 @@ migrate = load_migrate(db_instance, app)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

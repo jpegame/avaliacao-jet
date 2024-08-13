@@ -8,6 +8,8 @@ from flask_jwt_extended import (create_access_token, create_refresh_token,
 from flask_login import login_user, logout_user
 from flask_restful import Resource
 from marshmallow import fields
+
+from flaskr.models.token import TokenBlocklistModel
 from flaskr.models.user import UserModel
 from flaskr.schemas.token import (AccessRefreshTokenRequestSchema,
                                   AccessRefreshTokenUidResponseSchema,
@@ -56,6 +58,7 @@ class TokenResource(MethodResource, Resource):
         # remove login user for Flask-Login
         logout_user()
         now = datetime.now(timezone.utc)
+        TokenBlocklistModel(jti=jti, created_at=now).save()
         return make_response({"message": "Access token revoked or expired"}, 201)
 
 

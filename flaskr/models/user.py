@@ -1,3 +1,4 @@
+import sqlalchemy as sa
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from sqlalchemy_history import make_versioned
@@ -35,7 +36,7 @@ class UserModel(db_instance.Model, UserMixin):
         self.set_password(password_hash)
 
     def set_password(self, pwd):
-        self.password = generate_password_hash(pwd)
+        self.password_hash = generate_password_hash(pwd)
 
     @db_persist
     def save(self):
@@ -62,3 +63,5 @@ class UserModel(db_instance.Model, UserMixin):
             for count_user in range(1, 6):
                 user = UserModel(username="user" + str(count_user), password_hash="pwd" + str(count_user), email=f'user{str(count_user)}@gmail.com')
                 user.save()
+                
+sa.orm.configure_mappers()

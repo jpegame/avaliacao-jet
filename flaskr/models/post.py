@@ -1,3 +1,4 @@
+import sqlalchemy as sa
 from sqlalchemy.sql import func
 from sqlalchemy_history import make_versioned
 from sqlalchemy.dialects.postgresql import TEXT
@@ -43,3 +44,5 @@ class PostModel(db_instance.Model):
             for index in range(1, 6):
                 post = PostModel(title="post" + str(index), body="body" + str(index), author_id=index)
                 post.save()
+                
+sa.orm.configure_mappers()

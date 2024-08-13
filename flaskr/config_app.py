@@ -1,7 +1,7 @@
 import os
 
 DEFAULT_USER = os.environ.get('DATABASE_USER', 'postgres')
-DEFAULT_PWD = os.environ.get('DATABASE_PASSWORD', 'postgres')
+DEFAULT_PWD = os.environ.get('DATABASE_PASSWORD', '0')
 DEFAULT_HOST = os.environ.get('DATABASE_HOST', 'localhost')
 DEFAULT_PORT = os.environ.get('DATABASE_PORT', '5432')
 
