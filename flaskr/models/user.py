@@ -55,7 +55,7 @@ class UserModel(db_instance.Model, UserMixin):
         return cls.query.filter_by(id=_id).first()
 
     def verify_password(self, pwd):
-        return check_password_hash(self.password, pwd)
+        return check_password_hash(self.password_hash, pwd)
 
     @staticmethod
     def init_data():
