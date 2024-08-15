@@ -1,6 +1,6 @@
 from flask import make_response
 from flask_apispec import doc, marshal_with, use_kwargs
-from flask_jwt_extended import jwt_required
+from flaskr.redis import jwt_required
 from flask_apispec.views import MethodResource
 from flask_restful import Resource
 from flaskr.models.post import PostModel
@@ -20,7 +20,7 @@ class PostRegisterResource(MethodResource, Resource):
     @doc(description='Registro de Post')
     @jwt_required()
     def post(self, **kwargs):
-        post:  PostModel = PostModel(**kwargs)
+        post: PostModel = PostModel(**kwargs)
         post.save()
         return make_response(post_schema.dump(post), 200)
 
@@ -30,7 +30,7 @@ class PostRegisterResource(MethodResource, Resource):
     def get(self, **kwargs):
         post_id = kwargs["id"]
 
-        post:  PostModel = PostModel.find_by_id(post_id)
+        post: PostModel = PostModel.find_by_id(post_id)
         if post:
             return make_response(post_schema.dump(post), 200)
         return make_response({'message': 'Item not found'}, 404)
@@ -40,7 +40,7 @@ class PostRegisterResource(MethodResource, Resource):
     @jwt_required()
     def put(self, **kwargs):
         post_id = kwargs["id"]
-        post:  PostModel = PostModel.find_by_id(post_id)
+        post: PostModel = PostModel.find_by_id(post_id)
 
         if post:
             post.update(**kwargs)
@@ -53,7 +53,7 @@ class PostRegisterResource(MethodResource, Resource):
     @jwt_required()
     def delete(self, **kwargs):
         post_id = kwargs["id"]
-        post:  PostModel = PostModel.find_by_id(post_id)
+        post: PostModel = PostModel.find_by_id(post_id)
 
         if post:
             post.delete()

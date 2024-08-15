@@ -3,8 +3,8 @@ from datetime import datetime, timezone
 from flask import make_response
 from flask_apispec import doc, marshal_with, use_kwargs
 from flask_apispec.views import MethodResource
-from flask_jwt_extended import (create_access_token, create_refresh_token,
-                                get_jwt, get_jwt_identity, jwt_required)
+from flaskr.redis import jwt_required, store_token_in_redis
+from flask_jwt_extended import (create_access_token, get_jwt, get_jwt_identity)
 from flask_login import login_user, logout_user
 from flask_restful import Resource
 from marshmallow import fields
@@ -36,10 +36,10 @@ class TokenResource(MethodResource, Resource):
         login_user(user)
         # create a new token with the user id inside
         access_token = create_access_token(identity=user.id)
-        refresh_token = create_refresh_token(user.id)
+        
+        key = store_token_in_redis(access_token)
         return make_response({
-            "access_token": access_token,
-            "refresh_token": refresh_token,
+            "access_token": key,
             "uid": user.id
         }, 201)
 
@@ -74,7 +74,7 @@ class TokenRefresherResource(MethodResource, Resource):
     }, location='headers')
     @marshal_with(AccessTokenResponseSchema, code=201)
     @doc(description='Refresh current access token')
-    @jwt_required(refresh=True)
+    @jwt_required()
     def post(self, **kwargs):  # pylint: disable=unused-argument
         current_user = get_jwt_identity()
         new_token = create_access_token(identity=current_user, fresh=False)

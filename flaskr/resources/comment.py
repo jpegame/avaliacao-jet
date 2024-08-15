@@ -1,6 +1,6 @@
 from flask import make_response
 from flask_apispec import doc, marshal_with, use_kwargs
-from flask_jwt_extended import jwt_required
+from flaskr.redis import jwt_required
 from flask_apispec.views import MethodResource
 from flask_restful import Resource
 from flaskr.models.comment import CommentModel
